@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Estimation Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .print-only {
+                display: block;
+            }
+            body {
+                background-color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg text-white py-6">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl font-bold text-center">Construction Estimation Tool</h1>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Estimation Form -->
+                <div class="lg:col-span-1 no-print">
+                    <div class="bg-white rounded-lg card p-6">
+                        <h2 class="text-xl font-semibold mb-4">Project Details</h2>
+                        <form id="estimationForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Elevation (meters)</label>
+                                <select id="elevation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Select Elevation</option>
+                                    <option value="0TO6">0 to 6</option>
+                                    <option value="6TO10">6 to 10</option>
+                                    <option value="10TO20">10 to 20</option>
+                                    <option value="20TO30">20 to 30</option>
+                                    <option value="30TO40">30 to 40</option>
+                                    <option value="ABOVE 40">Above 40</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Days</label>
+                                <select id="days" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="">Select Days</option>
+                                    <option value="1 TO 7">1 to 7</option>
+                                    <option value="8 TO 15">8 to 15</option>
+                                    <option value="16 TO 30">16 to 30</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Length (m)</label>
+                                <input type="number" id="length" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" min="0">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Width (m)</label>
+                                <input type="number" id="width" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" min="0">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Height (m)</label>
+                                <input type="number" id="height" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" min="0">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                                <input type="number" id="quantity" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" min="1" value="1">
+                            </div>
+
+                            <div class="flex space-x-2">
+                                <button type="button" id="addItemBtn" class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    Add Item
+                                </button>
+                                <button type="button" id="clearItemsBtn" class="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                                    Clear All
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Estimation Results -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Estimation Summary</h2>
+                            <button id="printBtn" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 no-print">
+                                Print Bill
+                            </button>
+                        </div>
+
+                        <!-- Bill Header -->
+                        <div class="mb-6">
+                            <div class="text-center mb-4">
+                                <h1 class="text-2xl font-bold">CONSTRUCTION ESTIMATION</h1>
+                                <p class="text-gray-600" id="billDate"></p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+                                    <input type="text" id="clientName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter client name">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                                    <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter project name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Items Table -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elevation</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dimensions</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">M³</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider no-print">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsTable" class="bg-white divide-y divide-gray-200">
+                                    <!-- Items will be added here -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-4 text-right font-medium">Total:</td>
+                                        <td id="totalAmount" class="px-6 py-4 font-bold">0.00</td>
+                                        <td class="no-print"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Rate data (hidden from UI)
+        const rateData = {
+            "0TO6": {
+                "1 TO 7": 122.8,
+                "8 TO 15": 133.5,
+                "16 TO 30": 151
+            },
+            "6TO10": {
+                "1 TO 7": 129.6,
+                "8 TO 15": 137.4,
+                "16 TO 30": 155.9
+            },
+            "10TO20": {
+                "1 TO 7": 141.3,
+                "8 TO 15": 149.1,
+                "16 TO 30": 164.7
+            },
+            "20TO30": {
+                "1 TO 7": 142.3,
+                "8 TO 15": 154.9,
+                "16 TO 30": 174.4
+            },
+            "30TO40": {
+                "1 TO 7": 145.2,
+                "8 TO 15": 162.7,
+                "16 TO 30": 187.1
+            },
+            "ABOVE 40": {
+                "1 TO 7": 159.8,
+                "8 TO 15": 179.3,
+                "16 TO 30": 205.6
+            }
+        };
+
+        // Additional rate for AD/PF M2
+        const additionalRate = 95;
+
+        // Set current date
+        document.getElementById('billDate').textContent = new Date().toLocaleDateString();
+
+        // Items array to store all added items
+        let items = [];
+        let itemCounter = 1;
+
+        // Add item button click handler
+        document.getElementById('addItemBtn').addEventListener('click', addItem);
+
+        // Clear items button click handler
+        document.getElementById('clearItemsBtn').addEventListener('click', clearItems);
+
+        // Print button click handler
+        document.getElementById('printBtn').addEventListener('click', () => {
+            window.print();
+        });
+
+        function addItem() {
+            const elevation = document.getElementById('elevation').value;
+            const days = document.getElementById('days').value;
+            const length = parseFloat(document.getElementById('length').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+
+            // Validate inputs
+            if (!elevation || !days || isNaN(length) || isNaN(width) || isNaN(height)) {
+                alert('Please fill in all fields with valid values.');
+                return;
+            }
+
+            // Calculate volume (m³)
+            const volume = length * width * height;
+            
+            // Get rate based on elevation and days
+            const rate = rateData[elevation][days];
+            
+            // Calculate amount
+            const amount = volume * rate * quantity;
+
+            // Create item object
+            const item = {
+                id: itemCounter++,
+                elevation,
+                days,
+                length,
+                width,
+                height,
+                volume,
+                quantity,
+                rate,
+                amount
+            };
+
+            // Add to items array
+            items.push(item);
+
+            // Update table
+            updateTable();
+
+            // Clear form fields
+            document.getElementById('length').value = '';
+            document.getElementById('width').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('quantity').value = '1';
+        }
+
+        function removeItem(id) {
+            items = items.filter(item => item.id !== id);
+            updateTable();
+        }
+
+        function clearItems() {
+            if (confirm('Are you sure you want to clear all items?')) {
+                items = [];
+                itemCounter = 1;
+                updateTable();
+            }
+        }
+
+        function updateTable() {
+            const tableBody = document.getElementById('itemsTable');
+            tableBody.innerHTML = '';
+
+            let totalAmount = 0;
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${item.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.elevation}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.days}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.length}m × ${item.width}m × ${item.height}m</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.volume.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.quantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.amount.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap no-print">
+                        <button class="text-red-600 hover:text-red-900" onclick="removeItem(${item.id})">
+                            Remove
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+                totalAmount += item.amount;
+            });
+
+            // Update total amount
+            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96949b7e131e3b04',t:'MTc1NDIxMTQ0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
