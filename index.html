@@ -17,6 +17,19 @@
         .card {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 4rem;
+            color: rgba(203, 213, 225, 0.3);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+            font-weight: bold;
+            display: none;
+        }
         @media print {
             .no-print {
                 display: none;
@@ -26,6 +39,23 @@
             }
             body {
                 background-color: white;
+            }
+            .watermark {
+                display: block;
+            }
+            .invoice-container {
+                padding: 20px;
+                position: relative;
+            }
+            .invoice-header {
+                border-bottom: 2px solid #e5e7eb;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+            .invoice-footer {
+                margin-top: 30px;
+                border-top: 1px solid #e5e7eb;
+                padding-top: 20px;
             }
         }
         /* Mobile-specific styles */
@@ -43,7 +73,7 @@
 <body>
     <div class="min-h-screen">
         <!-- Header -->
-        <header class="gradient-bg text-white py-4 sticky top-0 z-10">
+        <header class="gradient-bg text-white py-4 sticky top-0 z-10 no-print">
             <div class="container mx-auto px-4 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -117,8 +147,8 @@
             </div>
 
             <!-- Estimation Results -->
-            <div class="bg-white rounded-lg card p-4">
-                <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+            <div class="bg-white rounded-lg card p-4 relative">
+                <div class="flex justify-between items-center mb-4 flex-wrap gap-2 no-print">
                     <h2 class="text-lg md:text-xl font-semibold">Scaffolding Estimation Summary</h2>
                     <button id="printBtn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm no-print flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -128,58 +158,124 @@
                     </button>
                 </div>
 
-                <!-- Bill Header -->
-                <div class="mb-4">
-                    <div class="text-center mb-3">
-                        <h1 class="text-xl md:text-2xl font-bold">SCAFFOLDING ESTIMATION</h1>
-                        <p class="text-gray-600 text-sm" id="billDate"></p>
+                <!-- Watermark -->
+                <div class="watermark">ESTIMATION BY CDH</div>
+
+                <!-- Invoice Container -->
+                <div class="invoice-container">
+                    <!-- Invoice Header -->
+                    <div class="invoice-header grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="md:col-span-1">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                <div>
+                                    <h2 class="text-xl font-bold text-blue-600">CDH Scaffolding</h2>
+                                    <p class="text-sm text-gray-500">Professional Scaffolding Solutions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-1 text-center">
+                            <h1 class="text-xl md:text-2xl font-bold uppercase">Scaffolding Estimation</h1>
+                        </div>
+                        <div class="md:col-span-1">
+                            <div class="text-right">
+                                <p class="text-sm"><span class="font-medium">Invoice #:</span> <span id="invoiceNumber">SCF-2023-</span></p>
+                                <p class="text-sm"><span class="font-medium">Date:</span> <span id="billDate"></span></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+
+                    <!-- Client Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
-                            <input type="text" id="clientName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter client name">
+                            <h3 class="text-sm font-semibold text-gray-700 mb-2">Client Information:</h3>
+                            <div class="mb-2">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Client Name</label>
+                                <input type="text" id="clientName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter client name">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Contact Number</label>
+                                <input type="text" id="clientPhone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter contact number">
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
-                            <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter project name">
+                            <h3 class="text-sm font-semibold text-gray-700 mb-2">Project Information:</h3>
+                            <div class="mb-2">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Project Name</label>
+                                <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter project name">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Project Location</label>
+                                <input type="text" id="projectLocation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter project location">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Items Table -->
-                <div class="table-container">
-                    <table class="min-w-full divide-y divide-gray-200 mobile-table">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elevation</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dimensions</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">M³</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider no-print">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="itemsTable" class="bg-white divide-y divide-gray-200">
-                            <!-- Items will be added here -->
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="6" class="px-2 py-2 md:px-4 md:py-3 text-right font-medium text-sm">Total:</td>
-                                <td id="totalAmount" class="px-2 py-2 md:px-4 md:py-3 font-bold text-sm">0.00</td>
-                                <td class="no-print"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    <!-- Items Table -->
+                    <div class="table-container mb-6">
+                        <table class="min-w-full divide-y divide-gray-200 mobile-table border">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">No.</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Elevation</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Days</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Dimensions</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">M³</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Qty</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                    <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider no-print">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsTable" class="bg-white divide-y divide-gray-200">
+                                <!-- Items will be added here -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-gray-50">
+                                    <td colspan="6" class="px-2 py-2 md:px-4 md:py-3 text-right font-medium text-sm border-r">Total Amount:</td>
+                                    <td id="totalAmount" class="px-2 py-2 md:px-4 md:py-3 font-bold text-sm">0.00</td>
+                                    <td class="no-print"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
 
-                <!-- Mobile Summary Card (shows when no items) -->
-                <div id="emptyState" class="text-center py-8 hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                    <p class="mt-2 text-gray-500">No scaffolding items added yet. Fill the form above to add items.</p>
+                    <!-- Mobile Summary Card (shows when no items) -->
+                    <div id="emptyState" class="text-center py-8 hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        <p class="mt-2 text-gray-500">No scaffolding items added yet. Fill the form above to add items.</p>
+                    </div>
+
+                    <!-- Invoice Footer -->
+                    <div class="invoice-footer">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-sm font-semibold mb-2">Terms & Conditions:</h4>
+                                <ul class="text-xs text-gray-600 list-disc pl-4 space-y-1">
+                                    <li>This is an estimation only and subject to site inspection.</li>
+                                    <li>Prices are valid for 30 days from the date of this estimation.</li>
+                                    <li>50% advance payment required to confirm the order.</li>
+                                    <li>Balance payment due upon completion of scaffolding erection.</li>
+                                    <li>Additional charges may apply for special requirements.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-right mt-6">
+                                    <div class="border-t-2 border-gray-300 pt-2 inline-block w-48">
+                                        <p class="text-sm font-medium">Authorized Signature</p>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-4">
+                                    <p class="text-xs text-gray-500">For CDH Scaffolding</p>
+                                    <p class="text-xs text-gray-500">Contact: +1234567890</p>
+                                    <p class="text-xs text-gray-500">Email: info@cdhscaffolding.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -224,7 +320,13 @@
         const additionalRate = 95;
 
         // Set current date
-        document.getElementById('billDate').textContent = new Date().toLocaleDateString();
+        const currentDate = new Date();
+        document.getElementById('billDate').textContent = currentDate.toLocaleDateString();
+        
+        // Set invoice number with current year and random number
+        const invoiceYear = currentDate.getFullYear();
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('invoiceNumber').textContent = `SCF-${invoiceYear}-${randomNum}`;
 
         // Items array to store all added items
         let items = [];
@@ -322,12 +424,12 @@
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
-                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.id}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.elevation.replace('TO', '-')}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.days}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.length}×${item.width}×${item.height}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.volume.toFixed(2)}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.quantity}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm border-r">${item.id}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm border-r">${item.elevation.replace('TO', '-')}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm border-r">${item.days}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm border-r">${item.length}×${item.width}×${item.height}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm border-r">${item.volume.toFixed(2)}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm border-r">${item.quantity}</td>
                     <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.amount.toFixed(2)}</td>
                     <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm no-print">
                         <button class="text-red-600 hover:text-red-900" onclick="removeItem(${item.id})">
@@ -370,5 +472,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9695fbfe41131d39',t:'MTc1NDIyNTg4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969600e3b28b9a8d',t:'MTc1NDIyNjA4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
