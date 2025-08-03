@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Construction Estimation Tool</title>
+    <title>Scaffolding Estimation Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -12,7 +12,7 @@
             background-color: #f0f4f8;
         }
         .gradient-bg {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
         }
         .card {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -28,136 +28,158 @@
                 background-color: white;
             }
         }
+        /* Mobile-specific styles */
+        @media (max-width: 640px) {
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .mobile-table {
+                min-width: 640px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="min-h-screen">
         <!-- Header -->
-        <header class="gradient-bg text-white py-6">
-            <div class="container mx-auto px-4">
-                <h1 class="text-3xl font-bold text-center">SCAFFOLDING ESTIMATION</h1>
+        <header class="gradient-bg text-white py-4 sticky top-0 z-10">
+            <div class="container mx-auto px-4 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <h1 class="text-xl md:text-3xl font-bold text-center">Scaffolding Estimation Tool</h1>
             </div>
         </header>
 
         <!-- Main Content -->
-        <main class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Estimation Form -->
-                <div class="lg:col-span-1 no-print">
-                    <div class="bg-white rounded-lg card p-6">
-                        <h2 class="text-xl font-semibold mb-4">Project Details</h2>
-                        <form id="estimationForm" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Elevation (meters)</label>
-                                <select id="elevation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="">Select Elevation</option>
-                                    <option value="0TO6">0 to 6</option>
-                                    <option value="6TO10">6 to 10</option>
-                                    <option value="10TO20">10 to 20</option>
-                                    <option value="20TO30">20 to 30</option>
-                                    <option value="30TO40">30 to 40</option>
-                                    <option value="ABOVE 40">Above 40</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Days</label>
-                                <select id="days" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="">Select Days</option>
-                                    <option value="1 TO 7">1 to 7</option>
-                                    <option value="8 TO 15">8 to 15</option>
-                                    <option value="16 TO 30">16 to 30</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Length (m)</label>
-                                <input type="number" id="length" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" min="0">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Width (m)</label>
-                                <input type="number" id="width" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" min="0">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Height (m)</label>
-                                <input type="number" id="height" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" min="0">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                                <input type="number" id="quantity" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" min="1" value="1">
-                            </div>
+        <main class="container mx-auto px-4 py-4">
+            <!-- Estimation Form -->
+            <div class="bg-white rounded-lg card p-4 mb-6 no-print">
+                <h2 class="text-lg md:text-xl font-semibold mb-3">Project Details</h2>
+                <form id="estimationForm" class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Elevation (meters)</label>
+                            <select id="elevation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                <option value="">Select Elevation</option>
+                                <option value="0TO6">0 to 6</option>
+                                <option value="6TO10">6 to 10</option>
+                                <option value="10TO20">10 to 20</option>
+                                <option value="20TO30">20 to 30</option>
+                                <option value="30TO40">30 to 40</option>
+                                <option value="ABOVE 40">Above 40</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Days</label>
+                            <select id="days" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                <option value="">Select Days</option>
+                                <option value="1 TO 7">1 to 7</option>
+                                <option value="8 TO 15">8 to 15</option>
+                                <option value="16 TO 30">16 to 30</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Length (m)</label>
+                            <input type="number" id="length" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" step="0.01" min="0">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Width (m)</label>
+                            <input type="number" id="width" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" step="0.01" min="0">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Height (m)</label>
+                            <input type="number" id="height" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" step="0.01" min="0">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                        <input type="number" id="quantity" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" min="1" value="1">
+                    </div>
 
-                            <div class="flex space-x-2">
-                                <button type="button" id="addItemBtn" class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    Add Item
-                                </button>
-                                <button type="button" id="clearItemsBtn" class="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                                    Clear All
-                                </button>
-                            </div>
-                        </form>
+                    <div class="flex space-x-2">
+                        <button type="button" id="addItemBtn" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                            Add Item
+                        </button>
+                        <button type="button" id="clearItemsBtn" class="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm">
+                            Clear All
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Estimation Results -->
+            <div class="bg-white rounded-lg card p-4">
+                <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+                    <h2 class="text-lg md:text-xl font-semibold">Scaffolding Estimation Summary</h2>
+                    <button id="printBtn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm no-print flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        Generate Professional Invoice
+                    </button>
+                </div>
+
+                <!-- Bill Header -->
+                <div class="mb-4">
+                    <div class="text-center mb-3">
+                        <h1 class="text-xl md:text-2xl font-bold">SCAFFOLDING ESTIMATION</h1>
+                        <p class="text-gray-600 text-sm" id="billDate"></p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+                            <input type="text" id="clientName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter client name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                            <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Enter project name">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Estimation Results -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg card p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">Estimation Summary</h2>
-                            <button id="printBtn" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 no-print">
-                                Print Bill
-                            </button>
-                        </div>
+                <!-- Items Table -->
+                <div class="table-container">
+                    <table class="min-w-full divide-y divide-gray-200 mobile-table">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elevation</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dimensions</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">M³</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-2 py-2 md:px-4 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTable" class="bg-white divide-y divide-gray-200">
+                            <!-- Items will be added here -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="px-2 py-2 md:px-4 md:py-3 text-right font-medium text-sm">Total:</td>
+                                <td id="totalAmount" class="px-2 py-2 md:px-4 md:py-3 font-bold text-sm">0.00</td>
+                                <td class="no-print"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
 
-                        <!-- Bill Header -->
-                        <div class="mb-6">
-                            <div class="text-center mb-4">
-                                <h1 class="text-2xl font-bold">SCAFFOLDING ESTIMATION</h1>
-                                <p class="text-gray-600" id="billDate"></p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
-                                    <input type="text" id="clientName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter client name">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
-                                    <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter project name">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Items Table -->
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elevation</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dimensions</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">M³</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider no-print">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="itemsTable" class="bg-white divide-y divide-gray-200">
-                                    <!-- Items will be added here -->
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-4 text-right font-medium">Total:</td>
-                                        <td id="totalAmount" class="px-6 py-4 font-bold">0.00</td>
-                                        <td class="no-print"></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
+                <!-- Mobile Summary Card (shows when no items) -->
+                <div id="emptyState" class="text-center py-8 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <p class="mt-2 text-gray-500">No scaffolding items added yet. Fill the form above to add items.</p>
                 </div>
             </div>
         </main>
@@ -219,6 +241,9 @@
             window.print();
         });
 
+        // Check empty state on load
+        checkEmptyState();
+
         function addItem() {
             const elevation = document.getElementById('elevation').value;
             const days = document.getElementById('days').value;
@@ -267,6 +292,11 @@
             document.getElementById('width').value = '';
             document.getElementById('height').value = '';
             document.getElementById('quantity').value = '1';
+            
+            // Scroll to table on mobile
+            if (window.innerWidth < 768) {
+                document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         function removeItem(id) {
@@ -292,16 +322,18 @@
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap">${item.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">${item.elevation}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">${item.days}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">${item.length}m × ${item.width}m × ${item.height}m</td>
-                    <td class="px-6 py-4 whitespace-nowrap">${item.volume.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">${item.quantity}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">${item.amount.toFixed(2)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap no-print">
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.id}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.elevation.replace('TO', '-')}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.days}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.length}×${item.width}×${item.height}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.volume.toFixed(2)}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.quantity}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm">${item.amount.toFixed(2)}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-3 whitespace-nowrap text-sm no-print">
                         <button class="text-red-600 hover:text-red-900" onclick="removeItem(${item.id})">
-                            Remove
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
                         </button>
                     </td>
                 `;
@@ -312,7 +344,31 @@
 
             // Update total amount
             document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+            
+            // Check if table is empty
+            checkEmptyState();
         }
+        
+        function checkEmptyState() {
+            const emptyState = document.getElementById('emptyState');
+            const tableContainer = document.querySelector('.table-container');
+            
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                tableContainer.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                tableContainer.classList.remove('hidden');
+            }
+        }
+        
+        // Add input validation for numeric fields
+        const numericInputs = document.querySelectorAll('input[type="number"]');
+        numericInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value < 0) this.value = 0;
+            });
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96949b7e131e3b04',t:'MTc1NDIxMTQ0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9695fbfe41131d39',t:'MTc1NDIyNTg4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
